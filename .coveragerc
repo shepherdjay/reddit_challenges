@@ -1,6 +1,6 @@
 [run]
 branch = True
-include = challenges
+source = challenges
 
 [report]
 exclude_lines =
