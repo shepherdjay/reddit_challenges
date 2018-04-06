@@ -64,7 +64,6 @@ def iterate_pies_of_type(ingredients_dict, type, pies_to_bake):
 
     pies_baked = 0
     while pies_baked != pies_to_bake:
-        # Try to make x pies of that type then the rest apple and add to solution array
         result, remaining_ingredients = make_pie(remaining_ingredients, recipe)
         if result:
             pies_baked += 1

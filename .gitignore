@@ -1,3 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
 .pytest_cache/
+.coverage
+__pycache__

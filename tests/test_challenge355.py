@@ -1,4 +1,4 @@
-from challenge355 import make_pies, map_ingredients, make_pie, PUMPKIN, APPLE, iterate_pies_of_type
+from challenges.challenge355 import make_pies, map_ingredients, make_pie, PUMPKIN, APPLE, iterate_pies_of_type
 import pytest
 
 INPUT1 = '10,14,10,42,24'
