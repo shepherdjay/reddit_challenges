@@ -92,3 +92,10 @@ def make_pies(ingredients_as_string):
     solution_index = sum_pies.index(max(sum_pies))
 
     return solution_array[solution_index]
+
+
+if __name__ == '__main__':
+    string = '{} pumpkin pies and {} apple pies'
+    print(string.format(*make_pies('10,14,10,42,24')))
+    print(string.format(*make_pies('12,4,40,30,40')))
+    print(string.format(*make_pies('12,14,20,42,24')))
