@@ -1,0 +1,25 @@
+language: python
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "nightly"
+
+branches:
+  only:
+    - master
+
+matrix:
+  allow_failures:
+    - python: "nightly"
+
+install:
+  - pip install -r requirements.txt
+  - pip install -r requirements-tests.txt
+  - pip install codecov
+
+ #command to run tests
+script: py.test --cov
+
+after_success:
+  - codecov
