@@ -82,9 +82,15 @@ def make_pies(ingredients_as_string):
         # On each loop try to make that many pumpkin and then make the rest apple
         # Update solution space
         pumpkin_pies_baked, pumpkin_rem_ingredients = iterate_pies_of_type(ingredients_dict, 'pumpkin', x)
-        for y in range(pumpkin_rem_ingredients['apple']):
-            apple_pies_baked, final_rem_ingredients = iterate_pies_of_type(pumpkin_rem_ingredients, 'apple', y)
-            solution_array.append((pumpkin_pies_baked, apple_pies_baked))
+        if pumpkin_pies_baked < x:
+            break
+        else:
+            for y in range(pumpkin_rem_ingredients['apple']):
+                apple_pies_baked, final_rem_ingredients = iterate_pies_of_type(pumpkin_rem_ingredients, 'apple', y)
+                if apple_pies_baked < y:
+                    break
+                else:
+                    solution_array.append((pumpkin_pies_baked, apple_pies_baked))
 
     sum_pies = [sol[0] + sol[1] for sol in solution_array]
 
