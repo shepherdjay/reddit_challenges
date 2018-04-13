@@ -5,8 +5,7 @@ import random
 
 
 def find_goldbach(n: int) -> List:
-    prime_numbers = list(primerange(0, n))
-    odd_primes = [prime for prime in prime_numbers if prime % 2 != 0]
+    odd_primes = [prime for prime in primerange(0, n) if prime % 2 != 0]
 
     solution_found = False
     while not solution_found:
