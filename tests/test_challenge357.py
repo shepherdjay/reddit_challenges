@@ -1,6 +1,6 @@
 import pytest
 
-from challenges.challenge357_int import kolokaski_ratio, counter, nillson
+from challenges.challenge357_int import kolokaski_ratio, nillson_generator
 
 KOLOKASKI = '12211212212211211221211212211'
 
@@ -27,17 +27,7 @@ def test_kolokaski_expected(input, exp_output):
 )
 def test_kolokaski_unknown(input):
     output = kolokaski_ratio(input)
-    assert pytest.approx(1) == (output[0] / output[1])
-
-
-@pytest.mark.parametrize(
-    'input_string, expected', [
-        ('1112', (3, 1)),
-        ('1212', (2, 2))
-    ]
-)
-def test_counter(input_string, expected):
-    assert expected == counter(input_string)
+    assert pytest.approx(1, rel=1.0e-04) == (output[0] / output[1])
 
 
 @pytest.mark.parametrize(
@@ -49,4 +39,9 @@ def test_counter(input_string, expected):
     ]
 )
 def test_nillson(k, expected):
-    assert expected == nillson(k)
+    gen = nillson_generator()
+    output = 0
+    for _ in range(k + 1):
+        output = next(gen)
+
+    assert expected == str(output)
