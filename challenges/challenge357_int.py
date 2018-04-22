@@ -32,10 +32,20 @@ def kolokaski_ratio(n: int) -> Tuple:
 
 
 if __name__ == '__main__':
+    print('Kolokoski Ratio (Ones, Twos)')
     print('CHALLENGE MODE')
-    print(kolokaski_ratio(1000000))
-    print(kolokaski_ratio(100000000))
+    print('Calculating 1 million digits')
+    print(kolokaski_ratio(1_000_000))
+    print('Calculating 100 million digits')
+    print(kolokaski_ratio(100_000_000))
 
-    print('BONUS MODE - GET A CUP OF COFFEE')
-    print(kolokaski_ratio(1000000000000))
-    print(kolokaski_ratio(100000000000000))
+    print('BONUS MODE - GET A LARGE CUP OF COFFEE')
+    try:
+        print('Calculating 1 trillion digits')
+        print(kolokaski_ratio(1_000_000_000_000))
+        print('Calculating 100 trillion digits')
+        print(kolokaski_ratio(100_000_000_000_000))
+    except KeyboardInterrupt:
+        print("I don't blame you for bowing out either, I waited a couple hours and no answer yet on first one.\n"
+              'I bet the next one takes years')
+        exit()
