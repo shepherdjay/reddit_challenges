@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from typing import List
+from typing import List, Tuple
 import math
 import requests
 
@@ -43,3 +43,28 @@ def find_closest_aeroplane(lat: float, long: float, airplanes: List[Airplane]) -
         results.append((airplane, airplane.find_distance(lat=lat, long=long)))
     results.sort(key=lambda x: x[1])
     return results[0][0]
+
+
+def get_list_of_aeroplanes_from_opensky() -> List[Airplane]:
+    pass
+
+
+def convert_str_coordinates(str_input: str) -> Tuple[float, float]:
+    split_string = str_input.split(sep=' ')
+    if split_string[1] == 'N':
+        lat = float(split_string[0])
+    else:
+        lat = float('-' + split_string[0])
+
+    if split_string[3] == 'E':
+        long = float(split_string[2])
+    else:
+        long = float('-' + split_string[2])
+
+    return lat, long
+
+def main():
+    pass
+
+if __name__ == '__main__':
+    challenge_inputs = []
