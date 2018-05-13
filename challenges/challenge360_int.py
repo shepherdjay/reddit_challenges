@@ -24,9 +24,7 @@ class Airplane:
                'LAT: {} LONG: {}\n' \
                'ALTITUDE: {} Meters\n' \
                'COUNTRY: {}\n' \
-               'ICAO ID: {}\n'.format(
-            self.callsign, self.lat, self.long, self.altitude, self.country, self.icaoid
-        )
+               'ICAO ID: {}\n'.format(self.callsign, self.lat, self.long, self.altitude, self.country, self.icaoid)
 
     def __repr__(self):
         return 'Airplane({},{},{},{},{},{})'.format(self.callsign, self.lat, self.long, self.altitude, self.country,
@@ -46,15 +44,8 @@ class Airplane:
         mapped_data = [openskydata[x] for x in openskydata_map.values()]
         return cls(*mapped_data)
 
-    def _haversine(self, lat: float, long: float) -> float:
-        """
-        Units in Kilometers
-        Haversine formula - latitudes must be in radians:
-        a = sin²(Δφ/2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ/2)
-        c = 2 ⋅ atan2( √a, √(1−a) )
-        d = R ⋅ c
-        """
-        earth_radius = 6371.0
+    def _calculate_a(self, lat: float, long: float) -> float:
+        """ a = sin²(Δφ/2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ/2) """
         lat_rad = math.radians(lat)
         long_rad = math.radians(long)
         airplane_lat_rad = math.radians(self.lat)
@@ -64,12 +55,44 @@ class Airplane:
 
         a = math.sin(delta_lat / 2) ** 2 + math.cos(long_rad) * math.cos(airplane_long_rad) * math.sin(
             delta_long / 2) ** 2
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt((1 - a)))
-        d = earth_radius * c
-        return d
+        return a
+
+    def _calculate_c(self, a: float) -> float:
+        """ c = 2 ⋅ atan2( √a, √(1−a) ) """
+        one_minus_a = 1 - a
+
+        if a < 0:
+            a = abs(a)
+            sqrt_a = math.sqrt(a)
+            sqrt_a = float('-' + str(sqrt_a))
+        else:
+            sqrt_a = math.sqrt(a)
+
+        if one_minus_a < 0:
+            one_minus_a = abs(one_minus_a)
+            sqrt_one_minus_a = math.sqrt(one_minus_a)
+            sqrt_one_minus_a = float('-' + str(sqrt_one_minus_a))
+        else:
+            sqrt_one_minus_a = math.sqrt(one_minus_a)
+        return 2 * math.atan2(sqrt_a, sqrt_one_minus_a)
+
+    def _haversine(self, lat: float, long: float) -> float:
+        """
+        Units in Kilometers
+        Haversine formula - latitudes must be in radians:
+        a = sin²(Δφ/2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ/2)
+        c = 2 ⋅ atan2( √a, √(1−a) )
+        d = R ⋅ c
+        """
+        earth_radius = 6371.0
+        a = self._calculate_a(lat, long)
+        c = self._calculate_c(a)
+        distance = earth_radius * c
+        return abs(distance)
 
     def distance(self, lat: float, long: float) -> float:
         """ Given a latitude and longitude calculate distance to airplane including altitude, return kilometers """
+        # Initial euclidian formula below
         # diff_lat = self.lat - lat
         # diff_long = self.long - long
         # euclidian = math.sqrt((diff_lat ** 2 + diff_long ** 2 + self.altitude ** 2))
