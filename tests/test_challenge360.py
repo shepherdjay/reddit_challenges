@@ -1,18 +1,21 @@
+from unittest.mock import patch
+
 import pytest
 
-from challenges.challenge360_int import Airplane, find_closest_aeroplane, convert_str_coordinates
+import challenges.challenge360_int as ch360
+from challenges.challenge360_int import Airplane, find_closest_aeroplane, convert_str_coordinates, JFK_AIRPORT, \
+    EIFEL_TOWER
 
-JFK_AIRPORT = '40.6413 N 73.7781 W'
-EIFEL_TOWER = '48.8584 N 2.2945 E'
+JFK_AIRPLANE = ["aaaaaa", "JFK1    ", "United States", 1526074539, 1526074539, -73.7781, 40.6413, 11200.0, False,
+                230.0, 130.0, None, None, 11200.0, "7500", False, 0]
+EIFEL_TOWER_AIRPLANE = ["bbbbbb", "EIF1    ", "France", 1526074539, 1526074539, 2.2945, 48.8584, 11200.0, False, 230.0,
+                        130.0,
+                        None, None, 11200.0, "7600", False, 0]
+
 JFK_AIRPORT_COORD = (40.6413, -73.7781)
 EIFEL_TOWER_COORD = (48.8584, 2.2945)
 
-TEST_RESPONSE = [
-    ["aaaaaa", "JFK1    ", "United States", 1526074539, 1526074539, -73.7781, 40.6413, 11200.0, False, 230.0, 130.0,
-     None, None, 11200.0, "7500", False, 0],
-    ["bbbbbb", "EIF1    ", "France", 1526074539, 1526074539, 2.2945, 48.8584, 11200.0, False, 230.0, 130.0,
-     None, None, 11200.0, "7600", False, 0]
-]
+TEST_RESPONSE = {'states': [JFK_AIRPLANE, EIFEL_TOWER_AIRPLANE]}
 
 
 @pytest.mark.parametrize(
@@ -22,23 +25,24 @@ TEST_RESPONSE = [
     ]
 )
 def test_find_closest_aeroplane(lat, long, expected):
-    test_airplanes = [Airplane.from_opensky(_) for _ in TEST_RESPONSE]
+    test_airplanes = [Airplane.from_opensky(_) for _ in TEST_RESPONSE['states']]
 
-    closest_airplane = find_closest_aeroplane(lat, long, test_airplanes)
+    closest_airplane, distance = find_closest_aeroplane(lat, long, test_airplanes)
 
     assert expected == closest_airplane.icaoid
+    assert 11200.0 == distance
 
 
 def test_return_airplane_from_opensky():
-    jfk = Airplane.from_opensky(TEST_RESPONSE[0])
+    jfk = Airplane.from_opensky(JFK_AIRPLANE)
 
     assert jfk.icaoid == 'aaaaaa'
     assert jfk.altitude == 11200.0
 
 
 def test_find_distance():
-    jfk = Airplane.from_opensky(TEST_RESPONSE[0])
-    assert 11200.0 == jfk.find_distance(40.6413, -73.7781)
+    jfk = Airplane.from_opensky(JFK_AIRPLANE)
+    assert 11200.0 == jfk.distance(40.6413, -73.7781)
 
 
 @pytest.mark.parametrize(
@@ -49,3 +53,11 @@ def test_find_distance():
 )
 def test_convert_coordinates(str_input, expected):
     assert expected == convert_str_coordinates(str_input)
+
+
+@patch('challenges.challenge360_int.requests.get')
+def test_functional(mocked_get):
+    mocked_get.return_value.json.return_value = TEST_RESPONSE
+    result = ch360.main(JFK_AIRPORT)
+
+    assert 'JFK1    ' == result.callsign
