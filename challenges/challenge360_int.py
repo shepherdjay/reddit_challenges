@@ -11,6 +11,7 @@ EIFEL_TOWER = '48.8584 N 2.2945 E'
 
 
 class Airplane:
+
     def __init__(self, callsign: str, lat: float, long: float, altitude: float, country: str, icaoid: str):
         self.callsign = callsign
         self.lat = lat
@@ -18,17 +19,17 @@ class Airplane:
         self.altitude = altitude
         self.country = country
         self.icaoid = icaoid
+        self.repr_str = [self.callsign, self.lat, self.long, self.altitude, self.country, self.icaoid]
 
     def __str__(self):
         return '{}\n' \
                'LAT: {} LONG: {}\n' \
                'ALTITUDE: {} Meters\n' \
                'COUNTRY: {}\n' \
-               'ICAO ID: {}\n'.format(self.callsign, self.lat, self.long, self.altitude, self.country, self.icaoid)
+               'ICAO ID: {}\n'.format(*self.repr_str)
 
     def __repr__(self):
-        return 'Airplane({},{},{},{},{},{})'.format(self.callsign, self.lat, self.long, self.altitude, self.country,
-                                                    self.icaoid)
+        return 'Airplane({},{},{},{},{},{})'.format(*self.repr_str)
 
     @classmethod
     def from_opensky(cls, openskydata: list) -> 'Airplane':
