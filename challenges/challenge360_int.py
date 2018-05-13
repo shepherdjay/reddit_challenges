@@ -44,6 +44,17 @@ class Airplane:
         mapped_data = [openskydata[x] for x in openskydata_map.values()]
         return cls(*mapped_data)
 
+    @staticmethod
+    def _real_sqrt(n: float) -> float:
+        """ Performs a square root without imaginary numbers"""
+        if n < 0:
+            n = abs(n)
+            sqrt_n = math.sqrt(n)
+            sqrt_n = float('-' + str(sqrt_n))
+        else:
+            sqrt_n = math.sqrt(n)
+        return sqrt_n
+
     def _calculate_a(self, lat: float, long: float) -> float:
         """ a = sin²(Δφ/2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ/2) """
         lat_rad = math.radians(lat)
@@ -61,19 +72,9 @@ class Airplane:
         """ c = 2 ⋅ atan2( √a, √(1−a) ) """
         one_minus_a = 1 - a
 
-        if a < 0:
-            a = abs(a)
-            sqrt_a = math.sqrt(a)
-            sqrt_a = float('-' + str(sqrt_a))
-        else:
-            sqrt_a = math.sqrt(a)
+        sqrt_a = self._real_sqrt(a)
 
-        if one_minus_a < 0:
-            one_minus_a = abs(one_minus_a)
-            sqrt_one_minus_a = math.sqrt(one_minus_a)
-            sqrt_one_minus_a = float('-' + str(sqrt_one_minus_a))
-        else:
-            sqrt_one_minus_a = math.sqrt(one_minus_a)
+        sqrt_one_minus_a = self._real_sqrt(one_minus_a)
         return 2 * math.atan2(sqrt_a, sqrt_one_minus_a)
 
     def _haversine(self, lat: float, long: float) -> float:
@@ -133,7 +134,7 @@ def convert_str_coordinates(str_input: str) -> Tuple[float, float]:
     return lat, long
 
 
-def main(location: str):
+def main(location: str) -> Airplane:
     print('Finding closest aeroplane to {}'.format(location))
     lat, long = convert_str_coordinates(location)
     aeroplanes = get_list_of_aeroplanes_from_opensky()
