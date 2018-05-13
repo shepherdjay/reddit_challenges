@@ -30,19 +30,19 @@ def test_find_closest_aeroplane(lat, long, expected):
     closest_airplane, distance = find_closest_aeroplane(lat, long, test_airplanes)
 
     assert expected == closest_airplane.icaoid
-    assert 11200.0 == distance
+    assert 11.2 == distance
 
 
 def test_return_airplane_from_opensky():
     jfk = Airplane.from_opensky(JFK_AIRPLANE)
 
-    assert jfk.icaoid == 'aaaaaa'
-    assert jfk.altitude == 11200.0
+    assert 'aaaaaa' == jfk.icaoid
+    assert 11200 == jfk.altitude
 
 
 def test_find_distance():
     jfk = Airplane.from_opensky(JFK_AIRPLANE)
-    assert 11200.0 == jfk.distance(40.6413, -73.7781)
+    assert 11.2 == jfk.distance(40.6413, -73.7781)
 
 
 @pytest.mark.parametrize(

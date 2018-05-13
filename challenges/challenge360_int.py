@@ -5,7 +5,7 @@ from typing import List, Tuple
 import requests
 
 OPENSKY_API_URL = 'https://opensky-network.org/api/states/all'
-EARTH_RADIUS = 6373.0
+
 JFK_AIRPORT = '40.6413 N 73.7781 W'
 EIFEL_TOWER = '48.8584 N 2.2945 E'
 
@@ -22,7 +22,7 @@ class Airplane:
     def __str__(self):
         return '{}\n' \
                'LAT: {} LONG: {}\n' \
-               'ALTITUDE: {}\n' \
+               'ALTITUDE: {} Meters\n' \
                'COUNTRY: {}\n' \
                'ICAO ID: {}\n'.format(
             self.callsign, self.lat, self.long, self.altitude, self.country, self.icaoid
@@ -46,13 +46,35 @@ class Airplane:
         mapped_data = [openskydata[x] for x in openskydata_map.values()]
         return cls(*mapped_data)
 
+    def _haversine(self, lat: float, long: float) -> float:
+        """
+        Units in Kilometers
+        Haversine formula - latitudes must be in radians:
+        a = sin²(Δφ/2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ/2)
+        c = 2 ⋅ atan2( √a, √(1−a) )
+        d = R ⋅ c
+        """
+        earth_radius = 6371.0
+        lat_rad = math.radians(lat)
+        long_rad = math.radians(long)
+        airplane_lat_rad = math.radians(self.lat)
+        airplane_long_rad = math.radians(self.long)
+        delta_lat = airplane_lat_rad - lat_rad
+        delta_long = airplane_long_rad - long_rad
+
+        a = math.sin(delta_lat / 2) ** 2 + math.cos(long_rad) * math.cos(airplane_long_rad) * math.sin(
+            delta_long / 2) ** 2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt((1 - a)))
+        d = earth_radius * c
+        return d
+
     def distance(self, lat: float, long: float) -> float:
-        """ Given a latitude and longitude calculate distance to airplane including altitude """
-        diff_lat = math.radians(self.lat) - math.radians(lat)
-        diff_long = math.radians(self.long) - math.radians(long)
-        ground_distance = math.hypot(diff_lat, diff_long)
-        total_distance = math.hypot(ground_distance, self.altitude)
-        return total_distance
+        """ Given a latitude and longitude calculate distance to airplane including altitude, return kilometers """
+        # diff_lat = self.lat - lat
+        # diff_long = self.long - long
+        # euclidian = math.sqrt((diff_lat ** 2 + diff_long ** 2 + self.altitude ** 2))
+
+        return self._haversine(lat, long) + self.altitude / 1000
 
 
 def find_closest_aeroplane(lat: float, long: float, airplanes: List[Airplane]) -> Tuple[Airplane, float]:
@@ -94,7 +116,7 @@ def main(location: str):
     aeroplanes = get_list_of_aeroplanes_from_opensky()
     closest_aeroplane, distance = find_closest_aeroplane(lat, long, aeroplanes)
 
-    print('At {} away, the closest airplane is: '.format(distance))
+    print('At about {:.2f} km away, the closest airplane is: '.format(distance))
     print(closest_aeroplane)
     return closest_aeroplane
 
