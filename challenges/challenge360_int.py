@@ -1,4 +1,5 @@
 import math
+import cmath
 from collections import OrderedDict
 from typing import List, Tuple
 
@@ -45,17 +46,6 @@ class Airplane:
         mapped_data = [openskydata[x] for x in openskydata_map.values()]
         return cls(*mapped_data)
 
-    @staticmethod
-    def _real_sqrt(n: float) -> float:
-        """ Performs a square root without imaginary numbers"""
-        if n < 0:
-            n = abs(n)
-            sqrt_n = math.sqrt(n)
-            sqrt_n = float('-' + str(sqrt_n))
-        else:
-            sqrt_n = math.sqrt(n)
-        return sqrt_n
-
     def _calculate_a(self, lat: float, long: float) -> float:
         """ a = sin²(Δφ/2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ/2) """
         lat_rad = math.radians(lat)
@@ -71,12 +61,11 @@ class Airplane:
 
     def _calculate_c(self, a: float) -> float:
         """ c = 2 ⋅ atan2( √a, √(1−a) ) """
-        one_minus_a = 1 - a
 
-        sqrt_a = self._real_sqrt(a)
+        sqrt_a = cmath.sqrt(a)
+        sqrt_one_minus_a = cmath.sqrt(1 - a)
 
-        sqrt_one_minus_a = self._real_sqrt(one_minus_a)
-        return 2 * math.atan2(sqrt_a, sqrt_one_minus_a)
+        return 2 * math.atan2(sqrt_a.real, sqrt_one_minus_a.real)
 
     def _haversine(self, lat: float, long: float) -> float:
         """
