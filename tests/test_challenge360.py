@@ -41,14 +41,15 @@ def test_return_airplane_from_opensky():
 
 
 @pytest.mark.parametrize(
-    'test_plane, exp_distance', [
-        (JFK_AIRPLANE, 11.2),
-        (EIFEL_TOWER_AIRPLANE, 5822)
+    'test_plane, exp_distance, resolution', [
+        (JFK_AIRPLANE, 11.2, None),
+        (EIFEL_TOWER_AIRPLANE, 5822, 100),
+        pytest.param(EIFEL_TOWER_AIRPLANE, 5822, None, marks=pytest.mark.xfail)
     ]
 )
-def test_find_distance(test_plane, exp_distance):
+def test_find_distance(test_plane, exp_distance, resolution):
     airplane = Airplane.from_opensky(test_plane)
-    assert exp_distance == pytest.approx(airplane.distance(40.6413, -73.7781), abs=100)
+    assert exp_distance == pytest.approx(airplane.distance(40.6413, -73.7781), abs=resolution)
 
 
 @pytest.mark.parametrize(

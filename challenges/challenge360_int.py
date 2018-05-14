@@ -52,10 +52,10 @@ class Airplane:
         long_rad = math.radians(long)
         airplane_lat_rad = math.radians(self.lat)
         airplane_long_rad = math.radians(self.long)
-        delta_lat = airplane_lat_rad - lat_rad
-        delta_long = airplane_long_rad - long_rad
+        delta_lat = lat_rad - airplane_lat_rad
+        delta_long = long_rad - airplane_long_rad
 
-        a = math.sin(delta_lat / 2) ** 2 + math.cos(long_rad) * math.cos(airplane_long_rad) * math.sin(
+        a = cmath.sin(delta_lat / 2) ** 2 + cmath.cos(lat_rad) * cmath.cos(airplane_lat_rad) * cmath.sin(
             delta_long / 2) ** 2
         return a
 
