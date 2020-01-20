@@ -20,10 +20,10 @@ def test_kolokaski_expected(input, exp_output):
 
 @pytest.mark.parametrize(
     'input', [
-        pytest.param(1000000, marks=pytest.mark.challenge),
-        pytest.param(100000000, marks=[pytest.mark.challenge, skip_travis]), # This isn't slow on local processor but is on travis
-        pytest.param(1000000000000, marks=[pytest.mark.bonus, pytest.mark.slowtest, skip_travis]),
-        pytest.param(100000000000000, marks=[pytest.mark.bonus, pytest.mark.slowtest, skip_travis])
+        pytest.param(1_000_000, marks=pytest.mark.challenge),
+        pytest.param(100_000_000, marks=[pytest.mark.challenge, pytest.mark.slowtest, skip_travis]),
+        pytest.param(1_000_000_000_000, marks=[pytest.mark.bonus, pytest.mark.slowtest, skip_travis]),
+        pytest.param(100_000_000_000_000, marks=[pytest.mark.bonus, pytest.mark.slowtest, skip_travis])
     ]
 )
 def test_kolokaski_unknown(input):
