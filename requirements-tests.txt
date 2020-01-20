@@ -17,7 +17,7 @@ py==1.8.1
 pyparsing==2.4.6
 pytest==5.3.4
 pytest-cov==2.5.1
-requests==2.18.4
+requests==2.22.0
 six==1.14.0
 sortedcontainers==2.1.0
 style==1.1.0
