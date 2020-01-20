@@ -1,7 +1,6 @@
 language: python
 python:
   - "3.6"
-  - "3.7"
   - "nightly"
 
 branches:
@@ -11,6 +10,7 @@ branches:
 matrix:
   allow_failures:
     - python: "nightly"
+  fast_finish: true
 
 install:
   - pip install -r requirements-tests.txt
