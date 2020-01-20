@@ -1,2 +1,2 @@
-requests
-sympy
+requests==2.18.4
+sympy==1.1.1
