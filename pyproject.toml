@@ -3,6 +3,9 @@ name = "reddit_challenges"
 version = "0.1.0"
 description = "My completion of the r/dailyprogrammer challenges"
 authors = ["Jay Shepherd <shepherdjay@users.noreply.github.com>"]
+packages = [
+    { include = "challenges"}
+]
 
 [tool.poetry.dependencies]
 python = "^3.6"

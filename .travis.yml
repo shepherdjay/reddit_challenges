@@ -15,6 +15,7 @@ matrix:
 
 install:
   - pip install poetry
+  - poetry install
 
  #command to run tests
 script: poetry run pytest --cov
