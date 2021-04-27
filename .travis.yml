@@ -14,11 +14,10 @@ matrix:
   fast_finish: true
 
 install:
-  - pip install -r requirements-tests.txt
-  - pip install codecov
+  - pip install poetry
 
  #command to run tests
-script: pytest --cov
+script: poetry run pytest --cov
 
 after_success:
   - codecov
