@@ -4,7 +4,7 @@ big-O==0.8.1
 certifi==2018.4.16
 chardet==3.0.4
 colorama==0.4.3
-coverage==4.5.1
+coverage==5.5
 hypothesis==5.2.0
 idna==2.6
 importlib-metadata==1.4.0
