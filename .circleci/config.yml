@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   python: circleci/python@2.1.1
+  codecov: codecov/codecov@3.2.4
 
 jobs:
   build-and-test:
@@ -26,3 +27,5 @@ workflows:
           matrix:
             parameters:
               python-version: ["3.7", "3.8", "3.9", "3.10"]
+          post-steps:
+            - codecov/upload
