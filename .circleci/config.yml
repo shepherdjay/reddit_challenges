@@ -1,0 +1,31 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@2.1.1
+  codecov: codecov/codecov@3.2.4
+
+jobs:
+  build-and-test:
+    parameters:
+      python-version:
+        type: string
+    executor: 
+      name: python/default
+      tag: << parameters.python-version >>
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: poetry
+      - run:
+          command: |
+            poetry run pytest --cov --cov-report xml
+
+workflows:
+  main:
+    jobs:
+      - build-and-test:
+          matrix:
+            parameters:
+              python-version: ["3.7", "3.8", "3.9", "3.10"]
+          post-steps:
+            - codecov/upload
