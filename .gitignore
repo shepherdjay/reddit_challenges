@@ -7,5 +7,4 @@ venv/
 .tox/
 .hypothesis
 .venv/
-poetry.lock
 dist/
