@@ -8,9 +8,10 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">3.6"
+python = ">=3.7"
 requests = ">2.25.1"
 sympy = ">1.8"
+pytest = ">=7.2.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = ">=6.2.3"
